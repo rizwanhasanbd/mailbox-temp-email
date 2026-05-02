@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mailbox</title>
+<meta name="description" content="Minimal temporary email for developers.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ededed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'></path><polyline points='22,6 12,13 2,6'></polyline></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      <span class="brand-name">Mailbox</span>
+    </div>
+    <div class="header-right">
+      <div class="status-indicator">
+        <div class="status-dot" id="status-dot"></div>
+        <span id="status-text" class="status-text">Connecting...</span>
+      </div>
+      <button class="btn-icon theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon theme-icon-dark"></i>
+        <i class="fas fa-sun theme-icon-light"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="container app">
+  
+  <section class="email-section">
+    <div class="email-wrapper">
+      <div class="email-container">
+        <input
+          type="text"
+          id="email-address"
+          class="email-input"
+          readonly
+          value="Initializing…"
+          aria-label="Your temporary email address"
+        />
+        <button class="btn-copy" id="btn-copy" title="Copy email address" aria-label="Copy">
+          Copy
+        </button>
+      </div>
+      <div class="email-actions">
+        <button class="btn-action" id="btn-refresh">
+          <i class="fas fa-arrow-rotate-right"></i> Refresh
+        </button>
+        <button class="btn-action" id="btn-new">
+          <i class="fas fa-arrows-rotate"></i> Change
+        </button>
+        <div class="divider"></div>
+        <button class="btn-action btn-danger" id="btn-delete">
+          <i class="fas fa-trash-can"></i> Delete
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="inbox-section">
+    <div class="inbox-header">
+      <h2 class="inbox-title">Inbox <span class="count-badge" id="count-badge">0</span></h2>
+    </div>
+
+    <div class="mail-list" id="mail-list">
+      <div class="empty-state">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="modal" id="mail-modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-subject">
+    <header class="modal-header">
+      <div class="modal-header-actions">
+        <button class="btn-icon close-btn" id="modal-close" aria-label="Close">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+      <h3 id="modal-subject">Loading…</h3>
+    </header>
+    <div class="modal-meta" id="modal-meta"></div>
+    <div class="modal-body" id="modal-body">
+      <div class="empty-state">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/theme.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/temp-mail.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => TempMail.init());
+</script>
+</body>
+</html>
