@@ -1,153 +1,128 @@
-# Mailbox — Free Temporary Email
-
-A minimal, modern, single-purpose temporary email web app. Generate a disposable
-inbox in one click and read incoming mail directly in the browser. Powered by
-the public **[mail.tm](https://mail.tm)** REST API.
-
-> ⚠️ Disposable inboxes are public. Never use them for sensitive accounts, banking,
-> or anything you wouldn't want strangers to read.
-
----
-
-## ✅ Currently Completed Features
-
-### Core
-- **One-click disposable inbox** — random `user@domain` created on first load
-- **Persistent address** — your inbox survives page reloads (stored in `localStorage`)
-- **Auto-refreshing inbox** — polls `mail.tm` every 10 seconds
-- **Visibility-aware refresh** — re-checks inbox when you switch back to the tab
-- **Read mail** — opens in a clean modal viewer with safe HTML rendering
-- **Mark as read** — automatic on open (PATCH `/messages/{id}`)
-- **Copy email address** — single tap copy, with toast confirmation
-- **Change address** — deletes the current inbox and creates a fresh one
-- **Delete inbox** — permanently removes the account on mail.tm
-
-### UI / UX
-- Single-page, no routing, no sidebar — purely focused on temp mail
-- Centered, minimal layout inspired by `temp-mail.org`, `10minutemail`, `linear.app`
-- **Dark / Light theme toggle** — dark by default, persisted in `localStorage["mailbox_theme"]`
-- Centered "Mailbox" header (3-column grid keeps it mathematically centered)
-- Subtle gradient backdrop adapts to active theme
-- Sticky translucent header with backdrop-blur
-- Status indicator pill (Connecting / Connected / Network error / Session expired)
-- Unread mail dot + bold styling
-- Avatar initial chip per sender
-- Smooth modal animation, mobile-friendly bottom-sheet on small screens
-- Fully responsive (works down to ~320px)
-- Keyboard-friendly (Esc closes modal)
-
-### Email Content Handling
-- HTML sanitization (strips `<script>`, `<iframe>`, `on*` handlers, `javascript:` URLs)
-- All links forced to `target="_blank" rel="noopener noreferrer"`
-- Decodes quoted-printable (`=20`, `=3D`, `=C3=A9`, soft line-breaks)
-- Decodes RFC 2047 encoded-word headers (`=?utf-8?B?...?=`, `=?utf-8?Q?...?=`)
-- Repairs UTF-8 mojibake (e.g. `â€™` → `’`)
-- Plain-text bodies preserved with `<pre>` and auto-linkified URLs
-
----
-
-## 🌐 Functional Entry URI
-
-| Path        | Method | Description                              |
-|-------------|--------|------------------------------------------|
-| `/`         | GET    | Single-page Temp Mail app (`index.html`) |
-
-No client-side routing or query parameters — the app initializes on `DOMContentLoaded`.
-
----
-
-## 🔌 External API (mail.tm)
-
-| Endpoint                     | Used For                          |
-|------------------------------|-----------------------------------|
-| `GET  /domains`              | List active inbox domains         |
-| `POST /accounts`             | Create disposable inbox           |
-| `POST /token`                | Authenticate, get JWT bearer      |
-| `GET  /me`                   | Verify token validity on reload   |
-| `GET  /messages?page=1`      | Poll inbox                        |
-| `GET  /messages/{id}`        | Fetch full message body           |
-| `PATCH /messages/{id}`       | Mark message as seen              |
-| `DELETE /accounts/{id}`      | Delete the disposable inbox       |
-
-All requests are CORS-enabled and authorization-free for account creation.
-After login, a JWT is sent in `Authorization: Bearer <token>`.
-
----
-
-## 💾 Data Models & Storage
-
-### `localStorage["mailbox_mailtm_account"]`
-```json
-{
-  "id": "string (mail.tm account id)",
-  "address": "user@domain.tld",
-  "password": "string (16 chars)",
-  "token": "JWT string"
-}
-```
-
-### In-memory message shape (from mail.tm)
-```json
-{
-  "id": "string",
-  "from": { "name": "string", "address": "string" },
-  "to":   [{ "address": "string" }],
-  "subject": "string",
-  "intro": "string",
-  "html":  ["string"] | null,
-  "text":  "string"  | null,
-  "seen":  false,
-  "createdAt": "ISO-8601 timestamp"
-}
-```
-
-No backend / no project tables are used.
-
----
-
-## 🗂 File Structure
-
-```
-index.html              Single-page app entry
-favicon.svg             Brand icon
-css/
-  └── style.css         All app styles (light, modern, responsive)
-js/
-  ├── utils.js          Toast + clipboard + tiny random helpers
-  └── temp-mail.js      mail.tm integration + UI logic
-README.md
-```
-
----
-
-## 🚧 Features Not Yet Implemented
-
-- Optional dark theme toggle
-- Address QR code (for quickly pasting on a phone)
-- Manual mark-all-as-read
-- Per-message delete (mail.tm supports `DELETE /messages/{id}`)
-- Multiple saved inboxes / quick switcher
-- Search & filter inbox
-- Custom username / custom domain selection
-- Inbox countdown / TTL display
-- PWA / offline shell
-
----
-
-## ▶️ Recommended Next Steps
-
-1. **Per-message delete** — add a trash icon in each `mail-item`.
-2. **Theme toggle** — variables already follow a single source of truth in `:root`,
-   so a `.theme-dark` class would be a small change.
-3. **QR code for address** — render a QR via a tiny lib (e.g. `qrcode.min.js` from jsDelivr)
-   inside a small popover under the email field.
-4. **PWA manifest + service worker** — make it installable & offline-capable.
-5. **Custom username** — add a small input + checkbox to override `randomUser()`
-   when calling `POST /accounts`.
-
----
-
-## 🚀 Deployment
-
-To make the website live, please use the **Publish tab** — it will deploy the
-static files and provide a public URL automatically.
+ # 📬 Mailbox — Free Temporary Email
+ 
+ A minimal, modern, single-purpose **temporary email web app**. Generate a disposable inbox in one click and read incoming mail directly in your browser. Powered by the public [mail.tm](https://mail.tm) REST API.
+ 
+ > ⚠️ **Disposable inboxes are public.** Never use them for sensitive accounts, banking, password resets to important services, or anything you wouldn't want strangers to read.
+ 
+ ---
+ 
+ ## ✨ Features
+ 
+ ### Core
+ - **One-click disposable inbox** — generate a fresh address instantly
+ - **Persistent address** — your inbox survives page reloads via `localStorage` 
+ - **Auto-refreshing inbox** — polls every 10 seconds for new mail
+ - **Visibility-aware refresh** — pauses polling when the tab is hidden to save bandwidth
+ - **Read mail** in a clean modal viewer
+ - **Mark as read** — automatic when opened
+ - **Copy email address** with toast confirmation
+ - **Change address** — delete current and generate a new one
+ - **Delete inbox** permanently
+ 
+ ### UI / UX
+ - Single-page, centered minimal design
+ - 🌗 **Dark / Light theme toggle**
+ - Status indicator pill, unread mail dot, avatar initial chip
+ - Smooth modal animations
+ - Fully responsive (works from 320px and up)
+ - Keyboard-friendly (`Esc` closes modal)
+ 
+ ### Email Content Handling
+ - HTML sanitization (XSS-safe rendering)
+ - All links forced to `target="_blank"` with `rel="noopener noreferrer"` 
+ - Quoted-printable decoding
+ - RFC 2047 encoded-word header decoding
+ - UTF-8 mojibake repair
+ - Plain-text body preservation with auto-linkified URLs
+ 
+ ---
+ 
+ ## 🚀 Getting Started
+ 
+ ### Run locally
+ This is a pure static site — no build step, no dependencies to install.
+ 
+ ```bash
+ git clone https://github.com/rizwanhasanbd/temp-name.git
+ cd temp-name
+ 
+ # Open index.html directly, or serve it:
+ python3 -m http.server 8000
+ # Then visit http://localhost:8000
+ ```
+ 
+ ### Deploy
+ Drop the folder into any static host:
+ - [Cloudflare Pages](https://pages.cloudflare.com)
+ - [GitHub Pages](https://pages.github.com)
+ - [Netlify](https://www.netlify.com)
+ - [Vercel](https://vercel.com)
+ 
+ ---
+ 
+ ## 📁 Project Structure
+ 
+ ```
+ temp-name/
+ ├── index.html        # Entry point
+ ├── favicon.svg       # App icon
+ ├── css/
+ │   └── style.css     # All styles (light/dark themes)
+ ├── js/
+ │   ├── utils.js      # Decoders, sanitizer, helpers
+ │   └── temp-mail.js  # Main app logic + mail.tm API calls
+ └── README.md
+ ```
+ 
+ ---
+ 
+ ## 🛠️ Tech Stack
+ 
+ - **HTML5 / CSS3 / Vanilla JavaScript** — no frameworks, no build tools
+ - **[mail.tm API](https://docs.mail.tm)** — disposable inbox provider
+ - **localStorage** — persistent session
+ - **JWT** — authentication with mail.tm
+ 
+ ---
+ 
+ ## 🗺️ Roadmap
+ 
+ Planned for future releases:
+ - [ ] Per-message delete
+ - [ ] QR code for the inbox address
+ - [ ] Manual "mark all as read"
+ - [ ] Multiple saved inboxes
+ - [ ] Search & filter mail
+ - [ ] Custom username
+ - [ ] Custom domain selection
+ - [ ] Inbox countdown / TTL display
+ - [ ] PWA + offline shell (service worker)
+ 
+ ---
+ 
+ ## 🤝 Contributing
+ 
+ Contributions are welcome. If you have a feature idea or find a bug:
+ 1. Open an issue describing the change
+ 2. Fork the repo
+ 3. Submit a pull request
+ 
+ ---
+ 
+ ## 📜 License
+ 
+ MIT — feel free to use, modify, and distribute.
+ 
+ ---
+ 
+ ## ⚠️ Disclaimer
+ 
+ Mailbox uses the public mail.tm service. **All inboxes are public and accessible to anyone who knows the address.** Use only for sign-ups, testing, or anywhere a real email isn't necessary. Never use for:
+ - Banking or financial accounts
+ - Password resets on important services
+ - Anything containing personal or sensitive information
+ 
+ ---
+ 
+ **Built with care by [@rizwanhasanbd](https://github.com/rizwanhasanbd).**
+ 
