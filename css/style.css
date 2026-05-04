@@ -324,9 +324,10 @@ input { font-family: inherit; }
   grid-template-columns: minmax(140px, 1fr) 2fr auto;
   gap: 16px;
   padding: 16px 0;
+  padding-left: 16px;
   border-bottom: 1px solid var(--border);
   cursor: pointer;
-  align-items: baseline;
+  align-items: center;
   transition: opacity var(--transition-fast);
 }
 
@@ -344,12 +345,13 @@ input { font-family: inherit; }
 .mail-item.unread::before {
   content: "";
   position: absolute;
-  left: -16px;
+  left: 4px;
+  top: 50%;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--text-main);
-  margin-top: 6px;
+  transform: translateY(-50%);
 }
 
 .mail-sender {
@@ -383,6 +385,11 @@ input { font-family: inherit; }
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto;
     gap: 4px 16px;
+    align-items: start;
+  }
+  .mail-item.unread::before {
+    top: 20px;
+    transform: none;
   }
   .mail-subject {
     grid-column: 1 / -1;
