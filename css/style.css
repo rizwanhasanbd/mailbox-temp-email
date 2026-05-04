@@ -321,7 +321,7 @@ input { font-family: inherit; }
 .mail-item {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(140px, 1fr) 2fr auto;
+  grid-template-columns: 160px 1fr auto;
   gap: 16px;
   padding: 16px 0;
   padding-left: 16px;
@@ -368,6 +368,7 @@ input { font-family: inherit; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .mail-time {
