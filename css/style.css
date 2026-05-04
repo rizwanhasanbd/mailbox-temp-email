@@ -319,6 +319,7 @@ input { font-family: inherit; }
 }
 
 .mail-item {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(140px, 1fr) 2fr auto;
   gap: 16px;
@@ -343,7 +344,7 @@ input { font-family: inherit; }
 .mail-item.unread::before {
   content: "";
   position: absolute;
-  left: 8px;
+  left: -16px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
